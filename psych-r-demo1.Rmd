@@ -77,19 +77,19 @@ setwd("~/R/teaching materials/interaction-design")
 
 - the data and code you need for today can be found here
 
-https://github.com/petermckenna/interaction-design
+https://github.com/petermckenna/psych-r-demo
 
 - on this page click **Clone or download** --> **Download ZIP**
 
 - Save the Zip folder in your user directory, e.g. `C/Users/xm42/University/Psychology coursework/R demo`. You may need to copy it from your *Downloads* folder
 
-- Save the folder where you keep your other **Interaction Design** materials
+- Save the folder where you keep your other **research methods** materials
 
 
 
 ## Setting up a working directory pt 1
 
-- to set up the directory locate the Interaction Design Zip folder by...
+- to set up the directory locate the **psych-demo** Zip folder by...
 
 >- Going to R Studio and clicking the **Files** tab on the right panel
 
@@ -105,7 +105,7 @@ https://github.com/petermckenna/interaction-design
 
 - Alternatively, enter the directory manually using the command `setwd` and quoting the file path, e.g.
 
-`setwd("C/Users/xm42/University/Interaction Design")`
+`setwd("C/Users/xm42/University/Resarch methods")`
 
 - Once complete you should see a list of files appear in the files tab (bottom right)
 - That means R Studio has access to the directory
