@@ -7,9 +7,8 @@ output: ioslides_presentation
 
 
 ```{r setup, include=F}
-knitr::opts_chunk$set(echo = F)
 
-setwd("~/R/teaching materials/interaction-design")
+setwd("~/R/teaching materials/psych-demo")
 
 ```
 
@@ -46,7 +45,7 @@ setwd("~/R/teaching materials/interaction-design")
 >- `readr` - for reading in data
 >- `tidyr` - for tidying & wrangling data
 >- `dplyr` - for tidying & wrangling data
->- `ggplot`- for plotting data
+>- `ggplot2`- for plotting data
 
 
 ## **Main verbs of R's Tidyverse**
@@ -105,7 +104,7 @@ https://github.com/petermckenna/psych-r-demo
 
 - Alternatively, enter the directory manually using the command `setwd` and quoting the file path, e.g.
 
-`setwd("C/Users/xm42/University/Resarch methods")`
+`setwd("C/Users/xm42/University/Research methods")`
 
 - Once complete you should see a list of files appear in the files tab (bottom right)
 - That means R Studio has access to the directory
@@ -184,13 +183,13 @@ head(t_test_data)
 
 ----
 
-- `id` = participant number \
+- `id` = participant number 
 
-- `Likert_rating` = participants evaluation of the interaction from 1 (Not very friendly) to 5 (very friendly) \
+- `Likert_rating` = participants evaluation of the interaction from 1 (Not very friendly) to 5 (very friendly) 
 
 - `animacy` = condition with two levels (animated, non-animated)
   - in the **animated** condition the robot tracks participant's head and uses hand gestures in communication
-  - in the **non_animated** condition the robot is static \
+  - in the **non_animated** condition the robot is static 
   
 - `response_time` vector = the time (seconds) it took for participants to indicate how friendly they thought the robot was on the Likert scale
 
@@ -224,7 +223,8 @@ summary(t_test_data)
 
 t_test_data %>%
   group_by(animacy) %>%                     
-  summarise(avg_rating = mean(likert_num),  
+  summarise(n = n(),
+            avg_rating = mean(likert_num),  
             sd_rating = sd(likert_num),
             avg_rt = mean(response_time),
             sd_rt = sd(response_time))
@@ -281,14 +281,15 @@ t_test_data %>%
 t <- t_test_data %>%
   group_by(animacy) %>%                     
   summarise(avg_rating = mean(likert_num),  
-            sd_rating = sd(likert_num))
+            sd_rating = sd(likert_num),
+            se_rating = sd_rating/sqrt(30))
 
 # then pass to ggplot2
 
 t %>%
   ggplot(., aes(animacy, avg_rating, fill = animacy)) +
   geom_bar(stat="identity") +
-  geom_errorbar(aes(ymin = avg_rating - sd_rating, ymax = avg_rating + sd_rating), width = .2)
+  geom_errorbar(aes(ymin = avg_rating - se_rating, ymax = avg_rating + se_rating), width = .2)
 
 
 ```
@@ -361,3 +362,11 @@ t.test(t_test1$non_animated, t_test1$animated)
 
 ```
 
+## **Resources**
+
+- [R for Data Science](http://r4ds.had.co.nz/) -- useful for learning *Tidyverse* syntax
+- [The R Book](https://www.cs.upc.edu/~robert/teaching/estadistica/TheRBook.pdf) -- useful for data analysis syntax
+- [Data Wrangling and Tidying cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) -- useful for wrangling and tidying syntax of the *Tidyverse*
+- [ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) -- useful for learning to plot with ggplot2
+- [R Studio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) -- useful guides for all things R Studio
+- [Plotting means and error bars](http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/) -- useful guide for plotting means and error bars with ggplot2
