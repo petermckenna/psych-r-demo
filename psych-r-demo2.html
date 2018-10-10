@@ -143,7 +143,6 @@ Dr. Peter McKenna
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">'readr'</span>)   <span class="co"># installs the 'readr' package</span>
 <span class="kw">install.packages</span>(<span class="st">'tidyr'</span>)   <span class="co"># installs the 'tidyr' package</span>
 <span class="kw">install.packages</span>(<span class="st">'dplyr'</span>)   <span class="co"># installs the 'dplyr' package</span>
-<span class="kw">install.packages</span>(<span class="st">'ggplot2'</span>) <span class="co"># installs the 'ggplot2' package</span>
 
 <span class="co"># Note: if you were here at the last demo these packages should already be installed</span>
 <span class="co"># If you're unsure run the code again</span></code></pre></div>
@@ -158,7 +157,6 @@ Dr. Peter McKenna
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)   <span class="co"># load 'readr' package</span>
 <span class="kw">library</span>(tidyr)   <span class="co"># load 'tidyr' package</span>
 <span class="kw">library</span>(dplyr)   <span class="co"># load 'dplyr' package</span>
-<span class="kw">library</span>(ggplot2) <span class="co"># load 'ggplot2' package</span>
 
 <span class="co"># if you're confident you have already installed the packages all you need to do is load them</span></code></pre></div>
 <ul>
@@ -240,6 +238,8 @@ Dr. Peter McKenna
 <li>use the description of the data to give meaningful labels to <code>key</code> and <code>value</code></li>
 </ul>
 <p>To begin, you code should look something like this</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newdata &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  &quot;tidyverse_command&quot;</span></code></pre></div>
 <ul>
 <li>remember <code>%&gt;%</code> means “then do this”</li>
 <li>be sure that the number of brackets is matched at the beginning and end of your code</li>
@@ -316,22 +316,53 @@ Dr. Peter McKenna
 <div id="joining-our-datasets" class="slide section level2">
 <h2>Joining our datasets</h2>
 <ul>
-<li>Ok, now we have a vector in common between the two tibbles</li>
+<li>OK, now we have a vector in common between the two tibbles</li>
 <li>Let’s being them together to create a master dataset</li>
-<li><p>To do so, we use <code>left_join</code></p></li>
+<li>To do so, we use <code>left_join</code></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newdata &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">left_join</span>(x, y, <span class="dt">by =</span> <span class="st">&quot;vector_in_common&quot;</span>)</code></pre></div>
+<ul>
 <li><code>x</code> and <code>y</code> in this instance represent your different tibbles</li>
 <li><code>by</code> want to know the name of the vector in common - remember to use quotations</li>
-<li><p>Have a look at your new tibble using <code>View</code></p></li>
+<li>Have a look at your new tibble using <code>View</code></li>
 </ul>
 </div>
-<div id="exercise-4-generating-overall-and-group-descriptve-statistics" class="slide section level2">
-<h2>Exercise 4: Generating overall and group descriptve statistics</h2>
+<div id="exercise-4-filtering-the-data-using-filter" class="slide section level2">
+<h2>Exercise 4: Filtering the data using <code>filter</code></h2>
+<ul>
+<li>What if for some reason you want to exclude a certain group from the data for later analysis?</li>
+<li>This can be achieved easily enough using the <code>filter</code> command</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newdata &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="dt">vector_of_interest =</span> condition_of_filter)</code></pre></div>
+<ul>
+<li>Using `filter, create a new tibble that only includes IQ scores above 90</li>
+<li>Also, try to create a new object that only has children from 5-6 years old</li>
+</ul>
+</div>
+<div class="slide section level2">
+
+<p>Some hints</p>
+<ul>
+<li>the operator <code>==</code> means is equal to</li>
+<li>the operator <code>!=</code> means does not equal</li>
+<li>likewise, you can use <code>&lt;</code> and <code>&gt;</code></li>
+</ul>
+</div>
+<div id="exercise-5-generating-overall-and-group-descriptve-statistics" class="slide section level2">
+<h2>Exercise 5: Generating overall and group descriptve statistics</h2>
 <ul>
 <li>In this final section we are going to produce summaries for our master tibble using the <code>summarise</code> command</li>
 <li>There are a number of commands that <code>summarise</code> understands, and these can be found in the <code>Help</code> tab (bottom-right panel)</li>
 <li>To begin, let’s focus on the <code>mean</code> and <code>sd</code> for each of our DV (fixation duration, IQ)</li>
-<li><p>To generate overall descriptives simply pipe the data into the <code>summarise</code> command and specify what you would like summarise</p></li>
-<li><p>You can do this for multiple DVs, simply add another argument to your summarise command</p></li>
+<li>To generate overall descriptives simply pipe the data into the <code>summarise</code> command and specify what you would like summarise</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg =</span> <span class="kw">mean</span>(DV),
+            <span class="dt">sd =</span> <span class="kw">sd</span>(DV))</code></pre></div>
+<ul>
+<li>You can do this for multiple DVs, simply add another argument to your summarise command</li>
 </ul>
 </div>
 <div id="group-level-summaries" class="slide section level2">
@@ -339,15 +370,19 @@ Dr. Peter McKenna
 <ul>
 <li>Given that we have three different age groups in the data it is of interest to examine the trends between the groups</li>
 <li>To generate group level summaries we use the <code>group_by</code> command</li>
-<li>We use the same approach as before, only we tell R that we’d like to gorup the data before generating our summaries</li>
+<li>We use the same approach as before, only we tell R that we’d like to group the data before generating our summaries</li>
 </ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(grouping_variable) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg =</span> <span class="kw">mean</span>(DV),
+            <span class="dt">sd =</span> <span class="kw">sd</span>(DV))</code></pre></div>
 </div>
 <div id="quick-recap" class="slide section level2">
 <h2>Quick recap</h2>
 <p>Today we have learned to</p>
 <ul>
 <li>read in data using <code>read.csv</code></li>
-<li>convert data from wiide into the long format using <code>gather</code></li>
+<li>convert data from wide into the long format using <code>gather</code></li>
 <li>create and amend existing vectors using <code>mutate</code></li>
 <li>rename vectors using <code>rename</code></li>
 <li>combine tibbles using <code>left_join</code></li>

@@ -74,20 +74,15 @@ setwd("~/User files/Peter/Heriot-Watt University/Teaching/Psychology seminars/ps
 >- It means is "then do this"
 
 
-## Retrieving the data
-
-- the data and code you need for today can be found here: https://github.com/petermckenna/psych-r-demo
-- on this page click **Clone or download** --> **Download ZIP**
-- Save the Zip folder in your user directory, e.g. `C/Users/xm42/University/Psychology coursework/R demo`. You may need to copy it from your *Downloads* folder
-- Save the folder where you keep your other **research methods** materials
-
-
-
 ## Setting up a working directory using projects
 
 - *Projects* in R create unique directories for your studies
 - Simply open R Studio, go to `File` -> `New Project` -> `New Directory` -> and choose the directory you selected for the data
 
+- Then retrieve the data from https://github.com/petermckenna/psych-r-demo
+- on this page click **Clone or download** --> **Download ZIP**
+- Save the Zip folder in your R project directory
+- You may need to copy it from your *Downloads* folder
 
 
 ## **Start your own script**
@@ -201,7 +196,7 @@ library(dplyr)   # load 'dplyr' package
 
 To begin, you code should look something like this
 
-```{r gather data}
+```{r gather data, echo=TRUE}
 
 newdata <- data %>%
   "tidyverse_command"
@@ -275,7 +270,7 @@ newdata <- data %>%
 - Let's being them together to create a master dataset
 - To do so, we use `left_join`
 
-```{r joining data}
+```{r joining data, echo= TRUE}
 
 newdata <- data %>%
   left_join(x, y, by = "vector_in_common")
@@ -292,7 +287,7 @@ newdata <- data %>%
 - What if for some reason you want to exclude a certain group from the data for later analysis?
 - This can be achieved easily enough using the `filter` command
 
-```{r usinf filter}
+```{r usinf filter, echo=TRUE}
 
 newdata <- data %>%
   filter(vector_of_interest = condition_of_filter)
@@ -319,7 +314,7 @@ Some hints
 - To begin, let's focus on the `mean` and `sd` for each of our DV (fixation duration, IQ)
 - To generate overall descriptives simply pipe the data into the `summarise` command and specify what you would like summarise
 
-```{r overall data summary}
+```{r overall data summary, echo=TRUE}
 
 new_data <- data %>%
   summarise(avg = mean(DV),
@@ -335,7 +330,7 @@ new_data <- data %>%
 - To generate group level summaries we use the `group_by` command
 - We use the same approach as before, only we tell R that we'd like to group the data before generating our summaries
 
-```{r grouped data summary}
+```{r grouped data summary, echo=TRUE}
 
 new_data <- data %>%
   group_by(grouping_variable) %>%
