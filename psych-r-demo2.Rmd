@@ -1,0 +1,366 @@
+---
+title: "R Programming using the Tidyverse"
+author: "Dr. Peter McKenna"
+date: "10 October 2018"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r global options, include = FALSE}
+
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE)
+
+```
+
+
+```{r wd, include=F}
+
+setwd("~/User files/Peter/Heriot-Watt University/Teaching/Psychology seminars/psych-r-demo")
+
+```
+
+
+## **Introduction**
+
+- A bit about me...
+    I'm a postdoc studying human-robot interaction. 
+    Use expertise of experimental design to help roboticists effectively evaluate their systems.
+    Currently designing a social skills training robot for adults with an autism-spectrum condition. 
+
+- In this introductory class you are going to learn how to:
+  >- read a .csv file into R Studio
+  >- wrangle and explore the data using Tidyverse methods
+
+
+## **Considerations**
+
+>- Today we are skimming the surface of R's functionality
+>- R has a steep learning curve relative to other high level stats packages (e.g. SPSS)
+>- You are going to make mistakes - a single letter out of place will cause errors. Take your time!
+>- Persistence is greatly rewarded in the long-term
+
+## **Tidyverse**
+
+>- Today we are using *Tidyverse* methods to wrangle and analyse the data
+>- The Tidyverse is a set of R packages that allows for more user friendly programming, relative to what's called *base R*
+>- For more about the Tidyverse see Hadley Wickham's free online text [R for Data Science](http://r4ds.had.co.nz/) 
+>- Our first task is to install these packages and load them to R Studio 
+
+## **Tidyverse packages**
+
+>- `readr` - for reading in data
+>- `tidyr` - for tidying & wrangling data
+>- `dplyr` - for tidying & wrangling data
+>- `ggplot2`- for plotting data
+
+
+## **Main verbs of R's Tidyverse**
+
+- These packages allow us to use Tidyverse verbs:
+
+>- `filter`: extract rows
+>- `select`: extract columns 
+>- `gather/spread`: gather columns into rows/spread rows into columns
+>- `mutate`: compute and append new/existing columns
+>- `summarise`: summarise data based on stated criteria
+
+
+## **Relatedly...Pipes!**
+
+>- You are going to see a lot of this symbol `%>%`
+>- This is the *pipe* operator
+>- Do not fear the pipe operator
+>- It means is "then do this"
+
+
+## Retrieving the data
+
+- the data and code you need for today can be found here: https://github.com/petermckenna/psych-r-demo
+- on this page click **Clone or download** --> **Download ZIP**
+- Save the Zip folder in your user directory, e.g. `C/Users/xm42/University/Psychology coursework/R demo`. You may need to copy it from your *Downloads* folder
+- Save the folder where you keep your other **research methods** materials
+
+
+
+## Setting up a working directory using projects
+
+- *Projects* in R create unique directories for your studies
+- Simply open R Studio, go to `File` -> `New Project` -> `New Directory` -> and choose the directory you selected for the data
+
+
+
+## **Start your own script**
+
+- You are now ready to start your own script
+- Scripts are edited in the *Workspace Tab* - above the R Console
+- Create script headings using `#` (called a "comment"; inactive code) 
+- Now your directory is set up the first task is to install and load the necessary packages
+
+
+## **Installing Packages**
+
+```{r loading packages, echo = T, eval = F, warning = F, message = F}
+
+install.packages('readr')   # installs the 'readr' package
+install.packages('tidyr')   # installs the 'tidyr' package
+install.packages('dplyr')   # installs the 'dplyr' package
+
+# Note: if you were here at the last demo these packages should already be installed
+# If you're unsure run the code again
+
+```
+
+- To execute code press `Ctrl + Enter`
+- This can be done for single lines, or multiple lines by highlighting sections
+- Package installation take a minute
+
+## **Loading in the packages**
+
+```{r loading packages pt2, echo = T, warning = F, message = F}
+
+library(readr)   # load 'readr' package
+library(tidyr)   # load 'tidyr' package
+library(dplyr)   # load 'dplyr' package
+
+# if you're confident you have already installed the packages all you need to do is load them
+
+```
+
+- do not be concerned by the text generated in the console; R packages are stamped to certain versions of R Studio, but work fine once loaded
+
+
+## **Reading in the data**
+
+- We then read in the data (a .csv file) using the following code
+
+`tibble <- read_csv("name_of_the_file.csv")`
+
+- this syntax creates a data table (or **tibble**) called from an existing .csv data file using the assign function `<-`
+- most often the tibble is assigned the name `data` or `df` (for data frame)
+- my advice: keep it simple
+
+
+## **Viewing the data**
+
+- Let's have a look at the data
+- Do do this you can click on your tibble created in the *Global Environment* (panel in top right)
+- There are several commands we can use to perform a sanity check before we get going 
+
+
+---
+
+- `View(data)`: note the capital V, this opens a new window showing the tibble in its entirety
+
+- `head(data)`: shows first 6 rows
+
+- `tail(data)`: shows bottom 6 rows
+
+- `str(data)`: structure of the tibble; e.g. the type of data contained in each vector
+
+
+
+## **Description of the data**
+
+>- The data details 60 children's fixation duration on a robot's face during a collaborative game
+>- There are three different age groups: 5-6, 7-8, and 9-10
+>- The data is in the *wide format* where each vector (or column) represents a unique condition
+>- This format is preferable for analysis in Excel and SPSS, but NOT for R where we want data to be in the *long format*
+
+## Wrangling and shaping the data
+
+>- There will often be times where you want to amend or add to your data set
+>- The *Tidyverse* syntax allows you to do this with a set of simple commands
+>- The following examples give you the opportunity to see how the main verbs of the Tidyverse work
+
+
+## Using gather
+
+- `gather` is an important tool for converting data from the *wide format* into the *long format*
+- the syntax is split into the following parts
+
+`gather(data, key = "key", value = "value")`
+  
+- So, when using the gather function we need to
+  - `data` = specify the data
+  - `key` = give our grouping vector a label
+  - `value` = and label the observations (e.g. the dependent variable)
+ 
+  
+## Crucial point - specfying data
+
+- if you are piping (e.g. `%>%`) your data into the `gather` command then gather ALREADY KNOWS WHAT THE DATA IS
+- In other words, you do not need to specify what the `data` is if you have mentioned it at the beginning of the argument
+- This applies to all of the commands in the *Tidyverse*, where the preferred method is to specify the data at the beginning and perform operations thereafter
+  
+
+## Exercise 1: Gathering the data
+
+- create a tibble that is the gathered form of the original data
+- use the description of the data to give meaningful labels to `key` and `value`
+
+To begin, you code should look something like this
+
+```{r gather data}
+
+newdata <- data %>%
+  "tidyverse_command"
+
+```
+
+- remember `%>%` means "then do this"
+- be sure that the number of brackets is matched at the beginning and end of your code
+
+----
+
+- Once your data has been gathered inspect it again using the `View` command
+
+`View(newdata)`
+
+- what do you notice about the shape of the data?
+- What has `gather` done?
+  
+
+## Execerise 2: `mutate` to add an ID colummn
+
+- So, having gathered your data you will notice that every row now represents a different participant
+- Remember, there are 60 children in this experiment
+- So, let's use `mutate` to create an id column
+
+----
+
+- To use `mutate` we simply add the argument to our pipeline, like we did with `gather`
+- However, `mutate` arguments take the following form
+
+`mutate(.data, new_vector = 1:n())`
+
+- I have given you a head start here with the argument: `1:n()` is a count argument that produces *1 to number of observations per row*
+- Remember the rule about piping data
+
+## Other useful ways to use `mutate`
+
+- Now you're getting a little more familiar with Tidyverse syntax
+- Have a look at the following bit of code
+
+`mutate_if(is.numeric, round, digits = 2)`
+
+- What do you think the following line of code will do? Discuss with your neighbour if you're not sure
+- Once you've figured it out, try adding this line to the end of your pipeline. 
+
+
+## Exercise 3: Using `rename` and `left_join` to add IQ data
+
+- What if we were also interested in children IQ, and if that had an effect on their fixation duration?
+- I have created a separate tibble called `iq_data.csv`
+- First create a tibble from this data using `read_csv` like we did earlier
+- Have a look at your new tibble using `View`
+- We are going to combine both of our tibbles using the command `left_join` to create a larger, more detailed tibble
+- However, to do so we must have a *SET OF VECTORS WITH THE SAME LABEL IN EACH TIBBLE*
+
+----
+
+- In `iq_dat.csv` the vector for id is `id`
+- If you called your id column `ID` in the fixation time tibble then we need to `rename` that vector before joining
+- If they are already the same name just follow along for practice
+- Using `rename` is fairly trivial, although a little confusing at first
+- Simply pipe your data into the following argument
+
+`rename(new_vector_name = old_vector_name)`
+
+- Notice that the new vector name comes before the old one...weird, but fine once you get your head around it
+
+## Joining our datasets
+
+- OK, now we have a vector in common between the two tibbles
+- Let's being them together to create a master dataset
+- To do so, we use `left_join`
+
+```{r joining data}
+
+newdata <- data %>%
+  left_join(x, y, by = "vector_in_common")
+
+```
+
+- `x` and `y` in this instance represent your different tibbles
+- `by` want to know the name of the vector in common - remember to use quotations
+- Have a look at your new tibble using `View`
+
+
+## Exercise 4: Filtering the data using `filter`
+
+- What if for some reason you want to exclude a certain group from the data for later analysis?
+- This can be achieved easily enough using the `filter` command
+
+```{r usinf filter}
+
+newdata <- data %>%
+  filter(vector_of_interest = condition_of_filter)
+
+```
+
+- Using `filter, create a new tibble that only includes IQ scores above 90
+- Also, try to create a new object that only has children from 5-6 years old
+
+----
+
+Some hints
+
+- the operator `==` means is equal to
+- the operator `!=` means does not equal
+- likewise, you can use `<` and `>` 
+
+
+
+## Exercise 5: Generating overall and group descriptve statistics 
+
+- In this final section we are going to produce summaries for our master tibble using the `summarise` command
+- There are a number of commands that `summarise` understands, and these can be found in the `Help` tab (bottom-right panel)
+- To begin, let's focus on the `mean` and `sd` for each of our DV (fixation duration, IQ)
+- To generate overall descriptives simply pipe the data into the `summarise` command and specify what you would like summarise
+
+```{r overall data summary}
+
+new_data <- data %>%
+  summarise(avg = mean(DV),
+            sd = sd(DV))
+
+```
+           
+- You can do this for multiple DVs, simply add another argument to your summarise command
+
+## Group level summaries
+
+- Given that we have three different age groups in the data it is of interest to examine the trends between the groups
+- To generate group level summaries we use the `group_by` command
+- We use the same approach as before, only we tell R that we'd like to group the data before generating our summaries
+
+```{r grouped data summary}
+
+new_data <- data %>%
+  group_by(grouping_variable) %>%
+  summarise(avg = mean(DV),
+            sd = sd(DV))
+
+```
+
+## Quick recap
+
+Today we have learned to
+
+- read in data using `read.csv`
+- convert data from wide into the long format using `gather`
+- create and amend existing vectors using `mutate`
+- rename vectors using `rename`
+- combine tibbles using `left_join`
+- summarise overall and grouped data using `summarise` and `group_by`
+
+
+## **Resources**
+
+- [R for Data Science](http://r4ds.had.co.nz/) -- useful for learning *Tidyverse* syntax
+- [The R Book](https://www.cs.upc.edu/~robert/teaching/estadistica/TheRBook.pdf) -- useful for data analysis syntax
+- [Data Wrangling and Tidying cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) -- useful for wrangling and tidying syntax of the *Tidyverse*
+- [ggplot2 cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) -- useful for learning to plot with ggplot2
+- [R Studio cheatsheets](https://www.rstudio.com/resources/cheatsheets/) -- useful guides for all things R Studio
+- [Plotting means and error bars](http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/) -- useful guide for plotting means and error bars with ggplot2
