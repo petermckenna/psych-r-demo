@@ -7,6 +7,10 @@ output:
   ioslides_presentation: default
 ---
 
+|![peter+alyx](peter+alyx_small.png) | 
+|:--:|
+|Alyx the robot and Pete (@PeterMcKenna89) |
+
 ```{r global options, include = FALSE}
 
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE)
